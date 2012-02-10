@@ -10,6 +10,7 @@ use Logger::Syslog;
 use YAML::Tiny;
 use LWP::Protocol::https;
 use WWW::Mechanize;
+use WebService::Linode;
 
 our ($apiKey, $domainID, $resourceID, $debug, @listURL);
 
@@ -38,3 +39,30 @@ logger_prefix("lin-ddns:");
 
 logger_prefix("lin-ddns:");
 $debug = 3 unless defined $debug;
+
+sub slog {
+	if ($debug >= 1) {
+		my $level = shift;
+		my $message = shift;
+		switch ($level) {
+			case 3 {
+				if ($level <= $debug) { info($message); }
+			}
+			case 2 {
+				if ($level <= $debug) { warning($message); }
+			}
+			case 1 {
+				if ($level <= $debug) { error($message); }
+			}
+			else { warning("incorrect value used for message level on subroutine slog call on line " . __LINE__); }
+		}
+
+		if ($debug >= 4) {
+			my $prefix;
+			if ($level == 1) { $prefix = "[error] "; }
+			elsif ($level == 2) { $prefix = "[warning] "; }
+			elsif ($level == 3) { $prefix = "[info] "; }
+			say($prefix . $message);
+		}
+	}
+}
