@@ -1,4 +1,4 @@
-#1/usr/bin/perl
+#!/usr/bin/perl
 
 use 5.10.1;
 use warnings;
@@ -11,6 +11,8 @@ use YAML::Tiny;
 use LWP::Protocol::https;
 use WWW::Mechanize;
 use WebService::Linode;
+
+use Data::Dumper;
 
 our ($apiKey, $domainID, $resourceID, $debug, @listURL);
 
@@ -39,6 +41,8 @@ logger_prefix("lin-ddns:");
 
 logger_prefix("lin-ddns:");
 $debug = 3 unless defined $debug;
+
+our $linApi = new WebService::Linode( apikey => $apiKey );
 
 sub slog {
 	if ($debug >= 1) {
